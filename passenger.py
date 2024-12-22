@@ -1,10 +1,12 @@
 import sqlite3
-from abstract_base import IRCTCBase
+from passenger_base import PassengerBase
+from ticket import Ticket
+from train import Train
 
-class Passenger(IRCTCBase):
+class Passenger(PassengerBase):
     def __init__(self):
         # Initialize database
-        self.conn = sqlite3.connect('passenger_login.db')
+        self.conn = sqlite3.connect('database/passenger_login.db')
         self.cursor = self.conn.cursor()
         self.create_table()
         self.logged_in_user = None
@@ -50,23 +52,18 @@ class Passenger(IRCTCBase):
             except sqlite3.IntegrityError:
                 print("Username already exists. Please try again.")
 
-    def book_ticket(self):
+    def check_user(self):
         if not self.logged_in_user:
             print("Please login first!")
             return
-        print("\nBooking ticket functionality is not yet implemented.")
+        self.ticket = Ticket()
+        self.ticket.book_ticket()
 
     def check_pnr_status(self):
         if not self.logged_in_user:
             print("Please login first!")
             return
         print("\nPNR status check functionality is not yet implemented.")
-
-    def print_ticket(self):
-        if not self.logged_in_user:
-            print("Please login first!")
-            return
-        print("\nPrint ticket functionality is not yet implemented.")
 
     def cancel_ticket(self):
         if not self.logged_in_user:
@@ -80,6 +77,7 @@ class Passenger(IRCTCBase):
             === IRCTC Login System ===
             1. Login to your account
             2. Register for a new account
+            3. Exit      
             """)
             choice = input("Enter your choice: ")
             if choice == '1':
@@ -88,8 +86,12 @@ class Passenger(IRCTCBase):
             elif choice == '2':
                 self.register()
                 break
+            elif choice == '3':
+                print("\nExiting the system. Goodbye!")
+                break
             else:
                 print("Invalid choice. Please try again.")
+            return    
     
     def show_main_menu(self):
         while True:
@@ -97,13 +99,13 @@ class Passenger(IRCTCBase):
             === IRCTC Main Menu ===
             1. Book Ticket
             2. Check PNR Status
-            3. Print Ticket
+            3. Check seat availability
             4. Cancel Ticket
             5. Exit
             """)
             choice = input("Enter your choice: ")
             if choice == '1':
-                self.book_ticket()
+                self.check_user()
             elif choice == '2':
                 self.check_pnr_status()
             elif choice == '3':
