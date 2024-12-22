@@ -15,10 +15,10 @@ class TicketBase(ABC):
         pass
     
     @abstractmethod
-    def ticket_fare(self):
+    def ticket_fare(self, no_of_tickets):
         pass
 
 
     @abstractmethod
-    def print_ticket(self):
+    def print_ticket(self,pnr):
         pass
